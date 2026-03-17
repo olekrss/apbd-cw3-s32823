@@ -48,7 +48,7 @@ public class RentalService
         return rental;
     }
 
-    public void ReturnItem(Guid rentalId)
+    public void ReturnItem(Guid rentalId, DateTime? customReturnDate = null)
     {
         var rental = _rentals.FirstOrDefault(r => r.Id == rentalId);
         if (rental == null)
@@ -61,15 +61,15 @@ public class RentalService
             throw new Exception("Rental is already finished");
         }
 
-        var returnDate = DateTime.Now;
+        var returnDate = customReturnDate ?? DateTime.Now;
         decimal penalty = 0;
 
         if (returnDate > rental.DueDate)
         {
-            var overDueDays = (rental.DueDate - returnDate).Days;
+            var overDueDays = (int)Math.Ceiling((returnDate - rental.DueDate).TotalDays);
             if (overDueDays > 0)
             {
-                penalty = overDueDays * 50m;
+                penalty = overDueDays * 50;
             }
 
         }
@@ -116,6 +116,6 @@ public class RentalService
                $"Total available equipment: {availableEquipmentCount}\n" +
                $"Total active rentals: {activeRentalsCount}\n" +
                $"Total overdue rentals: {overdueRentalsCount}\n" +
-               $"--------------------------------";
+               $"----------------------------";
     }
 }
