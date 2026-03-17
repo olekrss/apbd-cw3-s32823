@@ -2,9 +2,9 @@ namespace apbd_cw3_s32823.Classes;
 
 public abstract class Equipment
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public bool IsAvailable { get; set; }
+    public Guid Id { get; private set; }
+    public string Name { get;  private set; }
+    public bool IsAvailable { get;  private set; }
     
     protected Equipment(string name)
     {
